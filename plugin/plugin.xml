@@ -76,4 +76,68 @@
       </variable>
    </extension>
 
+   <!-- JUnit view context menu: Run / Debug (inkl. @Disabled) -->
+   <extension point="org.eclipse.ui.commands">
+      <category
+            id="io.github.christianlinzatti.rundisabled.category"
+            name="JUnit (inkl. @Disabled)">
+      </category>
+      <command
+            id="io.github.christianlinzatti.rundisabled.junitView.run"
+            categoryId="io.github.christianlinzatti.rundisabled.category"
+            name="Run (inkl. @Disabled)"
+            description="Ausgewählten Test inkl. @Disabled erneut ausführen">
+      </command>
+      <command
+            id="io.github.christianlinzatti.rundisabled.junitView.debug"
+            categoryId="io.github.christianlinzatti.rundisabled.category"
+            name="Debug (inkl. @Disabled)"
+            description="Ausgewählten Test inkl. @Disabled erneut debuggen">
+      </command>
+   </extension>
+
+   <extension point="org.eclipse.ui.handlers">
+      <handler
+            commandId="io.github.christianlinzatti.rundisabled.junitView.run"
+            class="io.github.christianlinzatti.rundisabled.JUnitViewLaunchHandler$Run">
+      </handler>
+      <handler
+            commandId="io.github.christianlinzatti.rundisabled.junitView.debug"
+            class="io.github.christianlinzatti.rundisabled.JUnitViewLaunchHandler$Debug">
+      </handler>
+   </extension>
+
+   <extension point="org.eclipse.ui.menus">
+      <menuContribution locationURI="popup:org.eclipse.jdt.junit.ResultView?after=additions">
+         <command
+               commandId="io.github.christianlinzatti.rundisabled.junitView.run"
+               label="Run (inkl. @Disabled)"
+               icon="icons/run_disabled.png"
+               style="push">
+            <visibleWhen checkEnabled="false">
+               <with variable="activeMenuSelection">
+                  <count value="1"/>
+                  <iterate ifEmpty="false">
+                     <instanceof value="org.eclipse.jdt.junit.model.ITestElement"/>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="io.github.christianlinzatti.rundisabled.junitView.debug"
+               label="Debug (inkl. @Disabled)"
+               icon="icons/run_disabled.png"
+               style="push">
+            <visibleWhen checkEnabled="false">
+               <with variable="activeMenuSelection">
+                  <count value="1"/>
+                  <iterate ifEmpty="false">
+                     <instanceof value="org.eclipse.jdt.junit.model.ITestElement"/>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+
 </plugin>

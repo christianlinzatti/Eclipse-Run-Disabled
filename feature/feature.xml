@@ -2,7 +2,7 @@
 <feature
       id="io.github.christianlinzatti.rundisabled.feature"
       label="Run @Disabled JUnit Tests"
-      version="1.0.0.qualifier"
+      version="1.1.0.qualifier"
       provider-name="Christian Linzatti">
 
    <description url="https://github.com/christianlinzatti/eclipse-run-disabled">

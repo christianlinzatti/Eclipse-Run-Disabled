@@ -64,6 +64,10 @@ Beide Dateien gibt es unter *Releases* bzw. als Artefakt des GitHub-Actions-Buil
 - Es entsteht eine eigene Run Configuration vom Typ **„JUnit (inkl. @Disabled)“** (Name endet auf
   „(inkl. Disabled)“). Sie hat dieselben Reiter wie eine normale JUnit-Konfiguration; „Rerun“ im
   JUnit-View verwendet sie automatisch weiter.
+- **JUnit-Ansicht:** Rechtsklick auf einen Test (z. B. einen übersprungenen `@Disabled`-Test) →
+  **Run (inkl. @Disabled)** bzw. **Debug (inkl. @Disabled)** (unten im Menü). Wie beim eingebauten
+  „Run/Debug“ wird die Run Configuration des Testlaufs übernommen (VM-Argumente, Umgebung,
+  Classpath) und nur auf den gewählten Test bzw. die gewählte Klasse eingeschränkt.
 - Für beliebige andere Launch-Konfigurationen gibt es die Variable `${run_disabled_agent}`, z. B. als
   VM-Argument: `-javaagent:${run_disabled_agent}`
 
