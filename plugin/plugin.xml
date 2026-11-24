@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <!-- Own launch configuration type: a JUnit launch that also runs @Disabled tests -->
+   <extension point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            id="io.github.christianlinzatti.rundisabled.launchConfigType"
+            name="JUnit (inkl. @Disabled)"
+            delegate="io.github.christianlinzatti.rundisabled.RunDisabledLaunchDelegate"
+            delegateName="JUnit-Launcher inkl. @Disabled"
+            delegateDescription="Startet JUnit-Tests und führt dabei auch mit @Disabled markierte Tests aus (auch @QuarkusTest)."
+            modes="run, debug"
+            allowCommandLine="true"
+            sourceLocatorId="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector"
+            sourcePathComputerId="org.eclipse.jdt.launching.sourceLookup.javaSourcePathComputer">
+      </launchConfigurationType>
+   </extension>
+
+   <extension point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            id="io.github.christianlinzatti.rundisabled.launchImage"
+            configTypeID="io.github.christianlinzatti.rundisabled.launchConfigType"
+            icon="icons/run_disabled.png">
+      </launchConfigurationTypeImage>
+   </extension>
+
+   <extension point="org.eclipse.debug.ui.launchConfigurationTabGroups">
+      <launchConfigurationTabGroup
+            id="io.github.christianlinzatti.rundisabled.tabGroup"
+            type="io.github.christianlinzatti.rundisabled.launchConfigType"
+            class="io.github.christianlinzatti.rundisabled.RunDisabledTabGroup">
+         <launchMode mode="run" description="JUnit-Tests inkl. @Disabled ausführen"/>
+         <launchMode mode="debug" perspective="org.eclipse.debug.ui.DebugPerspective"
+               description="JUnit-Tests inkl. @Disabled debuggen"/>
+      </launchConfigurationTabGroup>
+   </extension>
+
+   <!-- Run As / Debug As > JUnit Test (inkl. @Disabled) -->
+   <extension point="org.eclipse.debug.ui.launchShortcuts">
+      <shortcut
+            id="io.github.christianlinzatti.rundisabled.shortcut"
+            class="io.github.christianlinzatti.rundisabled.RunDisabledLaunchShortcut"
+            label="JUnit Test (inkl. @Disabled)"
+            icon="icons/run_disabled.png"
+            modes="run, debug">
+         <contextualLaunch>
+            <enablement>
+               <with variable="selection">
+                  <count value="1"/>
+                  <iterate>
+                     <adapt type="org.eclipse.jdt.core.IJavaElement">
+                        <and>
+                           <test property="org.eclipse.jdt.core.isInJavaProject"/>
+                           <test property="org.eclipse.jdt.core.hasTypeOnClasspath" value="org.junit.platform.commons.annotation.Testable"/>
+                           <test property="org.eclipse.jdt.junit.canLaunchAsJUnit" forcePluginActivation="true"/>
+                        </and>
+                     </adapt>
+                  </iterate>
+               </with>
+            </enablement>
+         </contextualLaunch>
+         <configurationType id="io.github.christianlinzatti.rundisabled.launchConfigType"/>
+         <description mode="run" description="JUnit-Tests inkl. @Disabled ausführen"/>
+         <description mode="debug" description="JUnit-Tests inkl. @Disabled debuggen"/>
+      </shortcut>
+   </extension>
+
+   <!-- ${run_disabled_agent} for use in any launch configuration: -javaagent:${run_disabled_agent} -->
+   <extension point="org.eclipse.core.variables.dynamicVariables">
+      <variable
+            name="run_disabled_agent"
+            description="Pfad zum Java-Agent, der @Disabled ignoriert (VM-Argument: -javaagent:${run_disabled_agent})"
+            resolver="io.github.christianlinzatti.rundisabled.AgentVariableResolver"
+            supportsArgument="false">
+      </variable>
+   </extension>
+
+</plugin>

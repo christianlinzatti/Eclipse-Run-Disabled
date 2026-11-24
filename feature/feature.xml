@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="io.github.christianlinzatti.rundisabled.feature"
+      label="Run @Disabled JUnit Tests"
+      version="1.0.0.qualifier"
+      provider-name="Christian Linzatti">
+
+   <description url="https://github.com/christianlinzatti/eclipse-run-disabled">
+      Adds "Run As / Debug As &gt; JUnit Test (inkl. @Disabled)": runs JUnit 5/6 tests annotated with @Disabled,
+      including @QuarkusTest classes on Quarkus 3.22+ (e.g. 3.27.x LTS).
+   </description>
+
+   <license url="https://www.eclipse.org/legal/epl-2.0/">
+      Eclipse Public License 2.0
+   </license>
+
+   <plugin
+         id="io.github.christianlinzatti.rundisabled"
+         version="0.0.0"/>
+
+</feature>
