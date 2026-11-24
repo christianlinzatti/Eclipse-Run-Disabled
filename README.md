@@ -76,6 +76,13 @@ Beide Dateien gibt es unter *Releases* bzw. als Artefakt des GitHub-Actions-Buil
 - Nur `@Disabled` wird ignoriert. `@DisabledOnOs`, `@DisabledIf…`, `@EnabledIf…` usw. bleiben aktiv.
 - Für eine `@Disabled`-Klasse startet Quarkus jetzt (wie für jeden anderen `@QuarkusTest`) die
   Anwendung inkl. Dev Services.
+- **Hängende Test-JVM:** Eclipse beendet die Test-JVM am Ende eines Laufs mit `System.exit(0)`.
+  Blockiert dabei ein Shutdown-Hook oder Thread (z. B. Quarkus-App/Dev Services eines vorher
+  deaktivierten Tests), beendet der Agent die JVM nach 15 s selbst und schreibt die noch laufenden
+  Threads in die Konsole (`[Eclipse-Run-Disabled] Test-JVM endet nach …`). Zeit ändern mit
+  `-Drundisabled.exitTimeout=<Sekunden>` (VM-Argument), `0` schaltet das ab.
+  Hängt dagegen ein Test selbst (die JUnit-Ansicht zeigt ihn noch als laufend), greift das nicht –
+  oft ist genau das der Grund für das `@Disabled`.
 - Der Agent greift per Reflection auf interne Quarkus-Felder zu (`CustomLauncherInterceptor.facadeLoader`,
   `FacadeClassLoader.disabledAnnotation`). Ändert Quarkus diese, erscheint eine Meldung in der Konsole
   und nur Punkt 1 wirkt.

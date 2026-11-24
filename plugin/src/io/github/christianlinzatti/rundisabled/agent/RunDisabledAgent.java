@@ -39,6 +39,7 @@ public final class RunDisabledAgent {
 	static void install(Instrumentation instrumentation) {
 		deactivateDisabledCondition();
 		instrumentation.addTransformer(new QuarkusFacadePatcher(), false);
+		ExitWatchdog.install();
 		log("aktiv - @Disabled wird ignoriert (" + DEACTIVATE_PROPERTY + "="
 				+ System.getProperty(DEACTIVATE_PROPERTY) + ")");
 	}

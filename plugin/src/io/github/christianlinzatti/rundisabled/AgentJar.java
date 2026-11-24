@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.Status;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
+import io.github.christianlinzatti.rundisabled.agent.ExitWatchdog;
 import io.github.christianlinzatti.rundisabled.agent.NeverPresent;
 import io.github.christianlinzatti.rundisabled.agent.QuarkusFacadePatcher;
 import io.github.christianlinzatti.rundisabled.agent.RunDisabledAgent;
@@ -35,7 +36,7 @@ public final class AgentJar {
 
 	/** All classes of the agent. The agent must not use nested or anonymous classes. */
 	private static final Class<?>[] AGENT_CLASSES = { RunDisabledAgent.class, QuarkusFacadePatcher.class,
-			NeverPresent.class };
+			NeverPresent.class, ExitWatchdog.class };
 
 	private static Path cached;
 

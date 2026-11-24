@@ -22,3 +22,18 @@ javac --release 17 -cp "$OUT/cp" -d "$OUT/testclasses" $(find "$SRC/testclasses"
 java -cp "$OUT/cp" SelfTest "$OUT/testclasses" false
 # 4. with agent: @Disabled classes are loaded as QuarkusTest
 java -javaagent:"$OUT/agent.jar" -cp "$OUT/cp" SelfTest "$OUT/testclasses" true
+
+# 5. exit watchdog: a blocking shutdown hook must not keep the test JVM alive ...
+start=$(date +%s)
+java -Drundisabled.exitTimeout=2 -javaagent:"$OUT/agent.jar" -cp "$OUT/cp" ExitTest hang 2> "$OUT/hang.err" || true
+took=$(( $(date +%s) - start ))
+grep -q "blocking-shutdown-hook" "$OUT/hang.err" || { echo "FAIL: no thread dump"; cat "$OUT/hang.err"; exit 1; }
+[ "$took" -lt 15 ] || { echo "FAIL: hanging JVM took ${took}s"; exit 1; }
+echo "  ok: hanging shutdown hook ended by watchdog after ${took}s"
+# ... and must not delay a normal exit
+start=$(date +%s)
+java -javaagent:"$OUT/agent.jar" -cp "$OUT/cp" ExitTest normal
+took=$(( $(date +%s) - start ))
+[ "$took" -lt 5 ] || { echo "FAIL: normal exit took ${took}s"; exit 1; }
+echo "  ok: normal exit not delayed (${took}s)"
+echo "SELFTEST OK (exit watchdog)"
